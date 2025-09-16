@@ -191,6 +191,21 @@ public class TodoListControllerTest {
 
     }
 
+    @Test
+    void should_return_422_when_update_a_todo_with_empty_text() throws Exception {
+        int id=createTodoAndGetId(todo1);
+        String requestBody = """
+                {
+                   
+                }
+                """;
+        mockMvc.perform(put("/todos/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnprocessableEntity());
+
+    }
+
 
 
 
