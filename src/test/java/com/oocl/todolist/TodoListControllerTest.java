@@ -142,11 +142,10 @@ public class TodoListControllerTest {
         int id=createTodoAndGetId(todo1);
         String requestBody = """
                 {
-                    "id": %d,
                     "text": "Buy meat",
                     "done": true
                 }
-                """.formatted(id);
+                """;
         mockMvc.perform(put("/todos/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
@@ -156,6 +155,45 @@ public class TodoListControllerTest {
                 .andExpect(jsonPath("$.done").value(true));
 
     }
+
+    @Test
+    void should_return_matching_code_when_update_id() throws Exception {
+        int id=createTodoAndGetId(todo1);
+        String requestBody = """
+                {
+                    "id":456,
+                    "text": "Buy meat",
+                    "done": true
+                }
+                """;
+        mockMvc.perform(put("/todos/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.text").value("Buy meat"))
+                .andExpect(jsonPath("$.done").value(true));
+
+    }
+
+    @Test
+    void should_return_404_when_update_a_non_exist_todo() throws Exception {
+        String requestBody = """
+                {
+                    "text": "Buy meat",
+                    "done": true
+                }
+                """;
+        mockMvc.perform(put("/todos/{id}", 999)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isNotFound());
+
+    }
+
+
+
+
 
 
 }
