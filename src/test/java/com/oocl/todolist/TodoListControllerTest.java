@@ -50,4 +50,26 @@ public class TodoListControllerTest {
                .andExpect(content().json("[]"));
         assertEquals(0, todoListController.getAlltodos().size());
     }
+    @Test
+    void should_return_one_to_do_when_one_exist() throws Exception {
+        String requestBody = """
+                {
+                    "text": "Buy milk"
+                }
+                """;
+        mockMvc.perform(post("/todos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.text").value("Buy milk"))
+                .andExpect(jsonPath("$.done").value(false))
+                .andReturn();
+        mockMvc.perform(get("/todos")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].text").value("Buy milk"))
+                .andExpect(jsonPath("$[0].done").value(false))
+                .andReturn();
+        assertEquals(1, todoListController.getAlltodos().size());
+    }
 }
