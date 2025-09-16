@@ -90,4 +90,16 @@ public class TodoListControllerTest {
                         .content(requestBody))
                 .andExpect(status().isUnprocessableEntity());
     }
+
+    @Test
+    void should_reject_no_text_when_post_given_a_todo_with_no_text() throws Exception {
+        String requestBody = """
+                {
+                }
+                """;
+        mockMvc.perform(post("/todos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnprocessableEntity());
+    }
 }
