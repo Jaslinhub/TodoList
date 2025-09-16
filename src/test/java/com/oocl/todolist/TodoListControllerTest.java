@@ -1,6 +1,8 @@
 package com.oocl.todolist;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oocl.todolist.Controller.TodoListController;
+import com.oocl.todolist.Entity.Todo;
 import com.oocl.todolist.Repository.TodoRespository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,10 +30,23 @@ public class TodoListControllerTest {
     @Autowired
     private TodoRespository todoListRepository;
 
+    private Todo todo1=new Todo("Buy milk");
+
     @BeforeEach
     public void setUp(){
         todoListRepository.clear();
     }
+
+    private int createTodoAndGetId(Todo todo) throws Exception {
+       String requestBody= new ObjectMapper().writeValueAsString(todo);
+       var result= mockMvc.perform(post("/todos")
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(requestBody))
+               .andExpect(status().isCreated())
+               .andReturn();
+       return new ObjectMapper().readTree(result.getResponse().getContentAsString()).get("id").asInt();
+    }
+
     @Test
     void should_return_todo_when_post_given_a_valid_todo() throws Exception {
         String requestBody = """
@@ -121,4 +136,26 @@ public class TodoListControllerTest {
                 .andReturn();
 
     }
+
+    @Test
+    void should_return_matching_code_when_update_both_fields() throws Exception {
+        int id=createTodoAndGetId(todo1);
+        String requestBody = """
+                {
+                    "id": %d,
+                    "text": "Buy meat",
+                    "done": true
+                }
+                """.formatted(id);
+        mockMvc.perform(put("/todos/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.text").value("Buy meat"))
+                .andExpect(jsonPath("$.done").value(true));
+
+    }
+
+
 }

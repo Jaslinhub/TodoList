@@ -1,6 +1,7 @@
 package com.oocl.todolist.Controller;
 
 import com.oocl.todolist.Dto.AddTodoReq;
+import com.oocl.todolist.Dto.UpdateTodoReq;
 import com.oocl.todolist.Entity.Todo;
 import com.oocl.todolist.Service.TodoListService;
 import com.oocl.todolist.Service.handleValidationException;
@@ -30,5 +31,9 @@ public class TodoListController {
         return todoListService.getAllTodos();
     }
 
+    @PutMapping("/todos/{id}")
+    public Todo updateTodo(@PathVariable int id, @RequestBody UpdateTodoReq updatedTodo) {
+        return todoListService.updateTodoById(id, updatedTodo);
 
+    }
 }
