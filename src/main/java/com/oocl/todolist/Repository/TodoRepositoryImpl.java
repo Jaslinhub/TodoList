@@ -1,5 +1,6 @@
 package com.oocl.todolist.Repository;
 
+import com.oocl.todolist.Dto.AddTodoReq;
 import com.oocl.todolist.Entity.Todo;
 import com.oocl.todolist.Repository.Dao.TodoListJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ public class TodoRepositoryImpl implements TodoRespository {
 
 
     @Override
-    public void addTodo(Todo todo) {
-        todo.setDone(false);
-        todoListJpaRepository.save(todo);;
+    public Todo addTodo(AddTodoReq todo) {
+        Todo newtodo=new Todo();
+        newtodo.setText(todo.getText());
+        newtodo.setDone(false);
+        return todoListJpaRepository.save(newtodo);
     }
 
     @Override

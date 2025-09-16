@@ -42,7 +42,7 @@ public class TodoListControllerTest {
         var result = mockMvc.perform(post("/todos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.text").value("Test Todo"))
                 .andExpect(jsonPath("$.done").value(false))
                 .andReturn();
@@ -65,7 +65,7 @@ public class TodoListControllerTest {
         mockMvc.perform(post("/todos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.text").value("Buy milk"))
                 .andExpect(jsonPath("$.done").value(false))
                 .andReturn();
@@ -101,5 +101,24 @@ public class TodoListControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void should_return_to_do_ignore_client_id_when_send_a_id() throws Exception {
+        String requestBody = """
+                {
+                    "id": 100,
+                    "text": "Buy milk",
+                    "done": true
+                }
+                """;
+        var result = mockMvc.perform(post("/todos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.text").value("Buy milk"))
+                .andExpect(jsonPath("$.done").value(false))
+                .andReturn();
+
     }
 }

@@ -1,5 +1,6 @@
 package com.oocl.todolist.Service;
 
+import com.oocl.todolist.Dto.AddTodoReq;
 import com.oocl.todolist.Entity.Todo;
 import com.oocl.todolist.Repository.TodoRepositoryImpl;
 import com.oocl.todolist.Repository.TodoRespository;
@@ -18,11 +19,13 @@ public class TodoListService {
         return todoRespository.findAll();
     }
 
-    public Todo addTodo(Todo todo) {
+    public Todo addTodo(AddTodoReq todo) {
         if (todo.getText() == null || todo.getText().isEmpty() ){
             throw new handleValidationException("Text cannot be empty");
         }
-        todoRespository.addTodo(todo);
-        return todo;
+/*        Todo newtodo = new Todo();
+        newtodo.setText(todo.getText());
+        newtodo.setDone(false);*/
+        return todoRespository.addTodo(todo);
     }
 }

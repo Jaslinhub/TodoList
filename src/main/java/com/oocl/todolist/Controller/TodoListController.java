@@ -1,5 +1,6 @@
 package com.oocl.todolist.Controller;
 
+import com.oocl.todolist.Dto.AddTodoReq;
 import com.oocl.todolist.Entity.Todo;
 import com.oocl.todolist.Service.TodoListService;
 import com.oocl.todolist.Service.handleValidationException;
@@ -19,8 +20,9 @@ public class TodoListController {
     private TodoListService todoListService;
 
     @PostMapping("/todos")
-    public Todo addTodo(@RequestBody Todo todo) {
-        return todoListService.addTodo(todo);
+    public ResponseEntity<Todo> addTodo(@RequestBody AddTodoReq todoRequest) {
+        Todo createdTodo = todoListService.addTodo(todoRequest);
+        return ResponseEntity.status(201).body(createdTodo);
     }
 
     @GetMapping("/todos")
