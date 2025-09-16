@@ -213,5 +213,12 @@ public class TodoListControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    void should_response_404_when_delete_given_non_exist_todo_id() throws Exception {
+        mockMvc.perform(delete("/todos/{id}", 999)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
 
 }

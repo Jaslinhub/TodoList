@@ -43,6 +43,10 @@ public class TodoListService {
     }
 
     public void deleteTodoById(int id) {
+        Todo existingTodo = todoRespository.getTodoById(id);
+        if (existingTodo == null) {
+            throw new TodoNotFindException("Todo not found with id: " + id);
+        }
         todoRespository.deleteTodoById(id);
     }
 }
