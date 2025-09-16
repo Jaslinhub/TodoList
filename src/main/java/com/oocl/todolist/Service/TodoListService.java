@@ -18,7 +18,10 @@ public class TodoListService {
         return todoRespository.findAll();
     }
 
-    public Todo addTodo(Todo todo){
+    public Todo addTodo(Todo todo) {
+        if (todo.getText() == null || todo.getText().isEmpty() ){
+            throw new handleValidationException("Text cannot be empty");
+        }
         todoRespository.addTodo(todo);
         return todo;
     }

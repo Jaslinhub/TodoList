@@ -9,4 +9,6 @@ public interface TodoRespository {
     void deleteTodo();
     void updateTodo();
     List<Todo> findAll();
+
+    void clear();
 }

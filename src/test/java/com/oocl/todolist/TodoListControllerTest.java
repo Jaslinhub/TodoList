@@ -1,6 +1,8 @@
 package com.oocl.todolist;
 
 import com.oocl.todolist.Controller.TodoListController;
+import com.oocl.todolist.Repository.TodoRespository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +24,14 @@ public class TodoListControllerTest {
 
     @Autowired
     private TodoListController todoListController;
+
+    @Autowired
+    private TodoRespository todoListRepository;
+
+    @BeforeEach
+    public void setUp(){
+        todoListRepository.clear();
+    }
     @Test
     void should_return_todo_when_post_given_a_valid_todo() throws Exception {
         String requestBody = """
@@ -36,11 +46,6 @@ public class TodoListControllerTest {
                 .andExpect(jsonPath("$.text").value("Test Todo"))
                 .andExpect(jsonPath("$.done").value(false))
                 .andReturn();
-        /*int id = new com.fasterxml.jackson.databind.ObjectMapper().readTree(result.getResponse().getContentAsString()).get("id").asInt();
-        mockMvc.perform(get("/todos/{id}", id).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text").value("Test Todo"))
-                .andExpect(jsonPath("$.done").value(false));*/
     }
 @Test
     void should_return_all_todos_when_none_exist() throws Exception {
@@ -71,5 +76,18 @@ public class TodoListControllerTest {
                 .andExpect(jsonPath("$[0].done").value(false))
                 .andReturn();
         assertEquals(1, todoListController.getAlltodos().size());
+    }
+
+    @Test
+    void should_reject_empty_text_when_post_given_a_todo_with_empty_text() throws Exception {
+        String requestBody = """
+                {
+                    "text": ""
+                }
+                """;
+        mockMvc.perform(post("/todos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isUnprocessableEntity());
     }
 }

@@ -2,17 +2,18 @@ package com.oocl.todolist.Controller;
 
 import com.oocl.todolist.Entity.Todo;
 import com.oocl.todolist.Service.TodoListService;
+import com.oocl.todolist.Service.handleValidationException;
 import org.hibernate.annotations.ConcreteProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins="http://localhost:3001")
 public class TodoListController {
     @Autowired
     private TodoListService todoListService;
@@ -26,4 +27,6 @@ public class TodoListController {
     public List<Todo> getAlltodos() {
         return todoListService.getAllTodos();
     }
+
+
 }
