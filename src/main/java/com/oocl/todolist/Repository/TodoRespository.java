@@ -8,11 +8,12 @@ import java.util.List;
 
 public interface TodoRespository {
     Todo addTodo(AddTodoReq todo);
-    void deleteTodo();
     List<Todo> findAll();
 
     void clear();
 
     Todo getTodoById(int id);
     Todo updateTodo(int id, Todo todo);
+
+    void deleteTodoById(int id);
 }

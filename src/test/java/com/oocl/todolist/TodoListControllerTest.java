@@ -205,10 +205,13 @@ public class TodoListControllerTest {
                 .andExpect(status().isUnprocessableEntity());
 
     }
-
-
-
-
+    @Test
+    void should_response_with_no_content_when_delete_given_todo_id() throws Exception {
+        int id = createTodoAndGetId(todo1);
+        mockMvc.perform(delete("/todos/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
 
 
 }

@@ -23,7 +23,8 @@ public class TodoRepositoryImpl implements TodoRespository {
     }
 
     @Override
-    public void deleteTodo() {
+    public void deleteTodoById(int id) {
+        todoListJpaRepository.deleteById(id);
 
     }
 

@@ -41,4 +41,8 @@ public class TodoListService {
         existingTodo.setText(updatedTodo.getText() != null ? updatedTodo.getText() : existingTodo.getText());
         return todoRespository.updateTodo(id, existingTodo);
     }
+
+    public void deleteTodoById(int id) {
+        todoRespository.deleteTodoById(id);
+    }
 }
